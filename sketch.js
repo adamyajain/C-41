@@ -11,7 +11,7 @@ var bg = "sprites/bg.png";
 var gameState = "onSling";
 var score = 0;
 function preload() {
-   getBackgroundImage();
+  backgroundImg = loadImage("sprites/bg2.jpg")
 }
 
 function setup(){
@@ -38,21 +38,22 @@ function setup(){
     log4 = new Log(760,120,150, PI/7);
     log5 = new Log(870,120,150, -PI/7);
 
-    bird = new Bird(200,50);
+    bird = new Bird(200,70);
 
     //log6 = new Log(230,180,80, PI/2);
     slingshot = new SlingShot(bird.body,{x:200, y:50});
 }
 
 function draw(){
-    if(backgroundImg)
+    //if(backgroundImg)
     background(backgroundImg);
-    if(bg === "sprites/bg.png"){
+    /*if(bg === "sprites/bg.png"){
       fill("white");
     }
     else{
         fill(15,252,181);
-    }
+    }*/
+    console.log(bird.body.position.x);
     textSize(25);
     text("SCORE-"+score,1000,50);
     Engine.update(engine);
@@ -81,7 +82,8 @@ function draw(){
 }
 
 function mouseDragged(){
-    if (gameState!=="launched"){
+    //if (gameState!=="launched"){
+        if(bird.body.position.x<201){
         Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
     }
 }
@@ -93,13 +95,15 @@ function mouseReleased(){
 }
 
 function keyPressed(){
-    if(keyCode === 32){
-       // slingshot.attach(bird.body);
+    if(keyCode === 32&&bird.body.speed<0.5){
+     slingshot.attach(bird.body);
+     bird.trajectory =[];
+     Matter.Body.setPosition(bird.body,{x: 200 , y: 70})
     }
 }
 
 
-async function getBackgroundImage(){
+/*async function getBackgroundImage(){
     var response = await fetch('http://worldtimeapi.org/api/timezone/Asia/Tokyo');
     var responseJSON = await response.json();
     var datetime = responseJSON.datetime;
@@ -111,4 +115,4 @@ async function getBackgroundImage(){
         bg = "sprites/bg2.jpg"
     }
     backgroundImg = loadImage(bg);
-}
+}*/
